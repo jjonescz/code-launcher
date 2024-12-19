@@ -1,6 +1,9 @@
 name: Build
 
 on:
+  schedule:
+    - cron: "30 03 14 */3 *" # every 3 months (to refresh expired artifacts)
+  workflow_dispatch:
   push:
     branches:
       - master
