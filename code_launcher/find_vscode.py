@@ -1,5 +1,6 @@
 import os
 import platform
+import shutil
 from .exception import CodeLauncherException, UnsupportedOSException
 
 
@@ -7,6 +8,10 @@ from .exception import CodeLauncherException, UnsupportedOSException
 Finds the default installation path for VSCode
 """
 def find_vscode_installation_path() -> str:
+    result = shutil.which('code')
+    if result:
+        return os.path.realpath(os.path.join(result, '..', '..'))
+
     if platform.system() == 'Windows':
         if "USERPROFILE" not in os.environ:
             raise CodeLauncherException("USERPROFILE is not found in environment variables")
