@@ -78,4 +78,6 @@ def project_type_to_icon(project_type) -> str:
         return SSH_REMOTE_PROJECT_ICON
     elif project_type == VscodeProjectType.Tunnel:
         return TUNNEL_PROJECT_ICON
+    elif project_type == VscodeProjectType.AttachedContainer:
+        return DEV_CONTAINER_PROJECT_ICON
     raise CodeLauncherUiException(f"Unknown project type: {project_type}")

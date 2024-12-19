@@ -14,6 +14,7 @@ class VscodeProjectType(Enum):
     DevContainer = 3
     SshRemote = 4
     Tunnel = 5
+    AttachedContainer = 6
 
 
 @dataclass
@@ -121,8 +122,14 @@ def parse_vscode_uri(uri: str) -> ParsedVscodeProject:
             hostname = decoded_netloc[len('tunnel+'):]
             url = hostname + ":" + _compute_url_for_remote_project(decoded_path)
             unique_project_identifier = _decoded_path_as_safe_filename(url)
+        elif decoded_netloc.startswith('attached-container+'):
+            decoded_path = unquote(parsed_uri.path)
+            project_type = VscodeProjectType.AttachedContainer
+            container_hash = decoded_netloc[len('attached-container+'):]
+            url = container_hash + ":" + _compute_url_for_remote_project(decoded_path)
+            unique_project_identifier = _decoded_path_as_safe_filename(url)
         else:
-            raise CodeLauncherException(f"Unknown vscode-remote netloc type: {decoded_netloc}")
+            raise CodeLauncherException(f"Unknown vscode-remote netloc type: {uri}")
 
     else:
         raise CodeLauncherException(f"Unknown vscode uri scheme: {parsed_uri.scheme}")
